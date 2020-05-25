@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="org.example.controller.WindowController"
+      prefHeight="400.0" prefWidth="600.0" spacing="20">
+
+    <style>
+        -fx-padding: 20;
+    </style>
+
+    <!-- choose file -->
+    <VBox spacing="5">
+        <Label text="File To Check" />
+        <TextArea fx:id="outFile" wrapText="true" disable="true" />
+        <Button fx:id="chooseFile" text="Choose File ..." onAction="#chooseFile" maxWidth="Infinity" focusTraversable="false" />
+    </VBox>
+
+    <!-- target checksum -->
+    <VBox spacing="5">
+        <Label text="Target Checksum" />
+        <TextArea fx:id="inTarget" wrapText="true" />
+    </VBox>
+
+    <!-- target algorithm -->
+    <VBox spacing="5">
+        <Label text="Algorithm" />
+        <ComboBox fx:id="algorithms" maxWidth="Infinity" />
+    </VBox>
+
+    <!-- compare -->
+    <VBox spacing="5">
+        <Label fx:id="result" />
+        <Button fx:id="compare" text="Compare Checksum" onAction="#compareChecksum" maxWidth="Infinity"
+                disable="true" defaultButton="true" />
+    </VBox>
+
+</VBox>
