@@ -1,6 +1,7 @@
 package utils;
 
 import model.Checksum;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.io.File;
@@ -13,6 +14,27 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public class ChecksumComputerTest {
+
+    /*==================================================*
+     *==                    FIELDS                    ==*
+     *==================================================*/
+
+    ChecksumComputer compMD5;
+    ChecksumComputer compSHA1;
+    ChecksumComputer compSHA256;
+    ChecksumComputer compSHA512;
+
+    /*==================================================*
+     *==                    SETUP                     ==*
+     *==================================================*/
+
+    @Before
+    public void setUp() {
+        compMD5 = new ChecksumComputer(Checksum.MD5);
+        compSHA1 = new ChecksumComputer(Checksum.SHA1);
+        compSHA256 = new ChecksumComputer(Checksum.SHA256);
+        compSHA512 = new ChecksumComputer(Checksum.SHA512);
+    }
 
     /*==================================================*
      *==                getChecksum()                 ==*
@@ -30,7 +52,7 @@ public class ChecksumComputerTest {
 
         // test each possible checksum algorithm
         for (Checksum alg : Checksum.values()) {
-            Optional<String> checksum = ChecksumComputer.getChecksum(alg, file);
+            Optional<String> checksum = new ChecksumComputer(alg).getChecksum(file);
             assertTrue(checksum.isEmpty());
             assertEquals(Optional.empty(), checksum);
         }
@@ -47,25 +69,25 @@ public class ChecksumComputerTest {
         File file = new File(fileUrl.getFile());
 
         // MD5
-        Optional<String> checksum = ChecksumComputer.getChecksum(Checksum.MD5, file);
+        Optional<String> checksum = compMD5.getChecksum(file);
 
         assertTrue(checksum.isPresent());
         assertEquals("d41d8cd98f00b204e9800998ecf8427e", checksum.get());
 
         // SHA1
-        checksum = ChecksumComputer.getChecksum(Checksum.SHA1, file);
+        checksum = compSHA1.getChecksum(file);
 
         assertTrue(checksum.isPresent());
         assertEquals("da39a3ee5e6b4b0d3255bfef95601890afd80709", checksum.get());
 
         // SHA256
-        checksum = ChecksumComputer.getChecksum(Checksum.SHA256, file);
+        checksum = compSHA256.getChecksum(file);
 
         assertTrue(checksum.isPresent());
         assertEquals("e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855", checksum.get());
 
         // SHA512
-        checksum = ChecksumComputer.getChecksum(Checksum.SHA512, file);
+        checksum = compSHA512.getChecksum(file);
 
         assertTrue(checksum.isPresent());
         assertEquals("cf83e1357eefb8bdf1542850d66d8007d620e4050b5715dc83f4a921d36ce9ce47d0d13c5d85f2b0ff8318d2877eec2f63b931bd47417a81a538327af927da3e", checksum.get());

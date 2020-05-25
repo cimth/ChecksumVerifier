@@ -19,27 +19,40 @@ public class ChecksumComputer {
     private static final Logger LOGGER = LogManager.getLogger(ChecksumComputer.class);
 
     /*==================================================*
+     *==                   FIELDS                     ==*
+     *==================================================*/
+
+    private Checksum checksum;
+
+    /*==================================================*
+     *==                CONSTRUCTORS                  ==*
+     *==================================================*/
+
+    public ChecksumComputer(Checksum checksum) {
+        this.checksum = checksum;
+    }
+
+    /*==================================================*
      *==               PUBLIC METHODS                 ==*
      *==================================================*/
 
     /**
-     * Computes the checksum with the given algorithm for the given file and returns it as string.
+     * Computes the checksum for the given file and returns it as string.
      *
-     * @param cs the algorithm to be used for computing the checksum
      * @param file the file for which the checksum is to be computed
      * @return the checksum as string or empty
      */
-    public static Optional<String> getChecksum(Checksum cs, File file) {
+    public Optional<String> getChecksum(File file) {
 
         // init return value with empty for the case there occurs an error while processing the file
         Optional<String> checksum = Optional.empty();
 
         // get hash of file as byte array
-        Optional<byte[]> hash = ChecksumComputer.getByteChecksumFromFile(cs.getAlgorithm(), file);
+        Optional<byte[]> hash = this.getByteChecksumFromFile(this.checksum.getAlgorithm(), file);
 
         // convert the byte array to the string to be returned
         if (hash.isPresent()) {
-            checksum = Optional.of(ChecksumComputer.convertByteArrayToHexString(hash.get()));
+            checksum = Optional.of(this.convertByteArrayToHexString(hash.get()));
         }
 
         // return the checksum as string or empty if an error had occurred
@@ -57,7 +70,7 @@ public class ChecksumComputer {
      * @param file the file for which the checksum is to be computed
      * @return the checksum as byte array or empty
      */
-    private static Optional<byte[]> getByteChecksumFromFile(String algorithm, File file) {
+    private Optional<byte[]> getByteChecksumFromFile(String algorithm, File file) {
 
         // initialize return value with empty if an error occurs while processing the file
         Optional<byte[]> hash = Optional.empty();
@@ -92,7 +105,7 @@ public class ChecksumComputer {
      * @param bytes the array to convert
      * @return the hexadecimal string converted from the byte array
      */
-    private static String convertByteArrayToHexString(byte[] bytes) {
+    private String convertByteArrayToHexString(byte[] bytes) {
 
         // StringBuilder for more efficiency
         StringBuilder hexString = new StringBuilder();
