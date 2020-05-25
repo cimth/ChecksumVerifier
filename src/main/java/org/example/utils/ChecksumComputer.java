@@ -1,6 +1,6 @@
-package utils;
+package org.example.utils;
 
-import model.Checksum;
+import org.example.model.Checksum;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

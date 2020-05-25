@@ -1,6 +1,7 @@
-package utils;
+package org.example.utils;
 
-import model.Checksum;
+import org.example.model.Checksum;
+import org.example.utils.ChecksumComputer;
 import org.junit.Before;
 import org.junit.Test;
 
