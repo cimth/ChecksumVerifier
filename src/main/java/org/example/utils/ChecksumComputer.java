@@ -59,6 +59,28 @@ public class ChecksumComputer {
         return checksum;
     }
 
+    /**
+     * Compares the checksum of the given file with the given target checksum.
+     *
+     * @param file the file for which the checksum should be verified
+     * @param targetChecksum the should-be checksum
+     * @return true or false when comparison succeeds, else empty
+     */
+    public Optional<Boolean> verifyChecksum(File file, String targetChecksum) {
+
+        // init result with empty if an error occurs while comparing
+        Optional<Boolean> result = Optional.empty();
+
+        // compare if possible
+        Optional<String> actualChecksum = getChecksum(file);
+        if (actualChecksum.isPresent()) {
+            result = Optional.of(targetChecksum.equals(actualChecksum.get()));
+        }
+
+        // return true or false when comparison succeeded, else empty
+        return result;
+    }
+
     /*==================================================*
      *==              PRIVATE METHODS                 ==*
      *==================================================*/

@@ -1,6 +1,5 @@
 package org.example.controller;
 
-import javafx.collections.ObservableArray;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -8,7 +7,6 @@ import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
 import javafx.stage.FileChooser;
 import javafx.stage.Window;
 import org.example.model.Checksum;
@@ -148,14 +146,15 @@ public class WindowController {
 
         // prepare comparing
         ChecksumComputer comp = new ChecksumComputer(algorithms.getValue());
-        File givenFile = new File(outFile.textProperty().get());
 
-        // get checksums to compare
-        String toBe = inTarget.textProperty().get();
-        Optional<String> toCheck = comp.getChecksum(givenFile);
+        File givenFile = new File(outFile.textProperty().get());
+        String targetChecksum = inTarget.textProperty().get();
+
+        // compare
+        Optional<Boolean> checksumsIdentical = comp.verifyChecksum(givenFile, targetChecksum);
 
         // compare and adjust GUI to the result
-        boolean correctChecksum = toCheck.isPresent() && toBe.equals(toCheck.get());
+        boolean correctChecksum = checksumsIdentical.isPresent() && checksumsIdentical.get();
         setResult(correctChecksum);
     }
 
