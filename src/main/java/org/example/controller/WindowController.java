@@ -48,20 +48,33 @@ public class WindowController {
      *==               INITIALIZATION                 ==*
      *==================================================*/
 
+    /**
+     * Initializes the Controller as adding listeners and filling the ComboBox to select a checksum algorithm.
+     */
     public void initialize() {
         insertAlgorithms();
 
         addCheckForValidInputListener(outFile);
         addCheckForValidInputListener(inTarget);
 
-        addActionOnEnterListener(compare);
+        addActionOnEnterListener(inTarget);
     }
 
+    /**
+     * Inserts all checksum algorithms available by the program into the corresponding ComboBox.
+     * Sets SHA256 as default value since it is the most used when writing this app.
+     */
     private void insertAlgorithms() {
         algorithms.getItems().setAll(Checksum.values());
         algorithms.setValue(Checksum.SHA256);
     }
 
+    /**
+     * Adds a listener to the given text input to enable or disable the compare button if the input is valid or
+     * invalid.
+     *
+     * @param gui the text input gui
+     */
     private void addCheckForValidInputListener(TextInputControl gui) {
         gui.textProperty().addListener((obs, oldText, newText) -> {
 
@@ -78,10 +91,21 @@ public class WindowController {
         });
     }
 
-    public void addActionOnEnterListener(Button btn) {
-        btn.addEventFilter(KeyEvent.KEY_PRESSED, evt -> {
+    /**
+     * Activates clicking Enter on the given text input to compare the checksums if available.
+     *
+     * @param gui the text input gui
+     */
+    public void addActionOnEnterListener(TextInputControl gui) {
+        gui.addEventFilter(KeyEvent.KEY_PRESSED, evt -> {
             if (evt.getCode() == KeyCode.ENTER) {
-                compareChecksum(null);
+
+                // only compare if available
+                if (!compare.isDisabled()) {
+                    compareChecksum(null);
+                }
+
+                // avoid further event handling
                 evt.consume();
             }
         });
@@ -91,6 +115,11 @@ public class WindowController {
      *==                EVENT HANDLING                ==*
      *==================================================*/
 
+    /**
+     * Opens a file chooser to select the file for which the checksum should be compared.
+     *
+     * @param mouseEvent the event initiating the file choosing
+     */
     @FXML
     public void chooseFile(ActionEvent mouseEvent) {
 
@@ -107,6 +136,13 @@ public class WindowController {
         }
     }
 
+    /**
+     * Compare the actual checksum with the target checksum of the file given in the gui.
+     *
+     * Should only be used when both the target checksum and the file are given and valid.
+     *
+     * @param actionEvent the event initiating the comparison
+     */
     @FXML
     public void compareChecksum(ActionEvent actionEvent) {
 
@@ -123,6 +159,11 @@ public class WindowController {
         setResult(correctChecksum);
     }
 
+    /**
+     * Changes the label presenting the comparison's result according to the result given by the argument.
+     *
+     * @param correct true for identical checksums, else false
+     */
     private void setResult(boolean correct) {
         if (correct) {
             result.setTextFill(Color.GREEN);
