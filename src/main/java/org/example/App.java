@@ -17,6 +17,7 @@ public class App extends Application {
     public void start(Stage stage) throws IOException {
         Scene scene = new Scene(loadFXML("pane"), 400, 400);
         stage.setScene(scene);
+        stage.setTitle("ChecksumVerifier");
         stage.show();
     }
 
