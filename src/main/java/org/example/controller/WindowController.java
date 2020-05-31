@@ -147,8 +147,8 @@ public class WindowController {
         // prepare comparing
         ChecksumComputer comp = new ChecksumComputer(algorithms.getValue());
 
-        File givenFile = new File(outFile.textProperty().get());
-        String targetChecksum = inTarget.textProperty().get();
+        File givenFile = new File(outFile.textProperty().get().trim());
+        String targetChecksum = inTarget.textProperty().get().trim();
 
         // compare
         Optional<Boolean> checksumsIdentical = comp.verifyChecksum(givenFile, targetChecksum);
