@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -18,6 +19,10 @@ public class App extends Application {
         Scene scene = new Scene(loadFXML("pane"), 400, 400);
         stage.setScene(scene);
         stage.setTitle("ChecksumVerifier");
+        stage.getIcons().addAll(
+                new Image(getClass().getResourceAsStream("icon/icon48.png")),
+                new Image(getClass().getResourceAsStream("icon/icon64.png"))
+        );
         stage.show();
     }
 
