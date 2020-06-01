@@ -2,6 +2,7 @@ package org.example.controller;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
@@ -13,12 +14,20 @@ import org.example.model.Checksum;
 import org.example.utils.ChecksumComputer;
 
 import java.io.File;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Optional;
+import java.util.ResourceBundle;
 
-public class WindowController {
+public class WindowController implements Initializable {
+
+    /*==================================================*
+     *==             INTERNATIONALIZATION             ==*
+     *==================================================*/
+
+    private ResourceBundle bundle;
 
     /*==================================================*
      *==                GUI-COMPONENTS                ==*
@@ -40,7 +49,7 @@ public class WindowController {
     private Label result;
 
     @FXML
-    private Button compare;
+    private Button verify;
 
     /*==================================================*
      *==               INITIALIZATION                 ==*
@@ -49,9 +58,16 @@ public class WindowController {
     /**
      * Initializes the Controller as adding listeners and filling the ComboBox to select a checksum algorithm.
      */
-    public void initialize() {
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+
+        // save resource bundle for internationalization
+        this.bundle = resourceBundle;
+
+        // add algorithms to combobox to select one of those
         insertAlgorithms();
 
+        // add event listening
         addCheckForValidInputListener(outFile);
         addCheckForValidInputListener(inTarget);
 
@@ -85,7 +101,7 @@ public class WindowController {
             boolean fileExists = !outFile.textProperty().isEmpty().get() && Files.exists(givenPath);
             boolean checksumGiven = !inTarget.textProperty().get().isEmpty();
 
-            compare.setDisable(!fileExists || !checksumGiven);
+            verify.setDisable(!fileExists || !checksumGiven);
         });
     }
 
@@ -99,8 +115,8 @@ public class WindowController {
             if (evt.getCode() == KeyCode.ENTER) {
 
                 // only compare if available
-                if (!compare.isDisabled()) {
-                    compareChecksum(null);
+                if (!verify.isDisabled()) {
+                    verifyChecksum(null);
                 }
 
                 // avoid further event handling
@@ -142,7 +158,7 @@ public class WindowController {
      * @param actionEvent the event initiating the comparison
      */
     @FXML
-    public void compareChecksum(ActionEvent actionEvent) {
+    public void verifyChecksum(ActionEvent actionEvent) {
 
         // prepare comparing
         ChecksumComputer comp = new ChecksumComputer(algorithms.getValue());
@@ -166,10 +182,10 @@ public class WindowController {
     private void setResult(boolean correct) {
         if (correct) {
             result.setTextFill(Color.GREEN);
-            result.setText("Correct Checksum!");
+            result.setText(bundle.getString("pane.correctChecksum"));
         } else {
             result.setTextFill(Color.RED);
-            result.setText("False Checksum!");
+            result.setText(bundle.getString("pane.falseChecksum"));
         }
     }
 
