@@ -1,26 +1,33 @@
 package org.example.controller;
 
-import javafx.collections.ObservableArray;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
 import javafx.stage.FileChooser;
 import javafx.stage.Window;
 import org.example.model.Checksum;
 import org.example.utils.ChecksumComputer;
 
 import java.io.File;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Optional;
+import java.util.ResourceBundle;
 
-public class WindowController {
+public class WindowController implements Initializable {
+
+    /*==================================================*
+     *==             INTERNATIONALIZATION             ==*
+     *==================================================*/
+
+    private ResourceBundle bundle;
 
     /*==================================================*
      *==                GUI-COMPONENTS                ==*
@@ -42,26 +49,46 @@ public class WindowController {
     private Label result;
 
     @FXML
-    private Button compare;
+    private Button verify;
 
     /*==================================================*
      *==               INITIALIZATION                 ==*
      *==================================================*/
 
-    public void initialize() {
+    /**
+     * Initializes the Controller as adding listeners and filling the ComboBox to select a checksum algorithm.
+     */
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+
+        // save resource bundle for internationalization
+        this.bundle = resourceBundle;
+
+        // add algorithms to combobox to select one of those
         insertAlgorithms();
 
+        // add event listening
         addCheckForValidInputListener(outFile);
         addCheckForValidInputListener(inTarget);
 
-        addActionOnEnterListener(compare);
+        addActionOnEnterListener(inTarget);
     }
 
+    /**
+     * Inserts all checksum algorithms available by the program into the corresponding ComboBox.
+     * Sets SHA256 as default value since it is the most used when writing this app.
+     */
     private void insertAlgorithms() {
         algorithms.getItems().setAll(Checksum.values());
         algorithms.setValue(Checksum.SHA256);
     }
 
+    /**
+     * Adds a listener to the given text input to enable or disable the compare button if the input is valid or
+     * invalid.
+     *
+     * @param gui the text input gui
+     */
     private void addCheckForValidInputListener(TextInputControl gui) {
         gui.textProperty().addListener((obs, oldText, newText) -> {
 
@@ -74,14 +101,25 @@ public class WindowController {
             boolean fileExists = !outFile.textProperty().isEmpty().get() && Files.exists(givenPath);
             boolean checksumGiven = !inTarget.textProperty().get().isEmpty();
 
-            compare.setDisable(!fileExists || !checksumGiven);
+            verify.setDisable(!fileExists || !checksumGiven);
         });
     }
 
-    public void addActionOnEnterListener(Button btn) {
-        btn.addEventFilter(KeyEvent.KEY_PRESSED, evt -> {
+    /**
+     * Activates clicking Enter on the given text input to compare the checksums if available.
+     *
+     * @param gui the text input gui
+     */
+    public void addActionOnEnterListener(TextInputControl gui) {
+        gui.addEventFilter(KeyEvent.KEY_PRESSED, evt -> {
             if (evt.getCode() == KeyCode.ENTER) {
-                compareChecksum(null);
+
+                // only compare if available
+                if (!verify.isDisabled()) {
+                    verifyChecksum(null);
+                }
+
+                // avoid further event handling
                 evt.consume();
             }
         });
@@ -91,6 +129,11 @@ public class WindowController {
      *==                EVENT HANDLING                ==*
      *==================================================*/
 
+    /**
+     * Opens a file chooser to select the file for which the checksum should be compared.
+     *
+     * @param mouseEvent the event initiating the file choosing
+     */
     @FXML
     public void chooseFile(ActionEvent mouseEvent) {
 
@@ -107,29 +150,42 @@ public class WindowController {
         }
     }
 
+    /**
+     * Compare the actual checksum with the target checksum of the file given in the gui.
+     *
+     * Should only be used when both the target checksum and the file are given and valid.
+     *
+     * @param actionEvent the event initiating the comparison
+     */
     @FXML
-    public void compareChecksum(ActionEvent actionEvent) {
+    public void verifyChecksum(ActionEvent actionEvent) {
 
         // prepare comparing
         ChecksumComputer comp = new ChecksumComputer(algorithms.getValue());
-        File givenFile = new File(outFile.textProperty().get());
 
-        // get checksums to compare
-        String toBe = inTarget.textProperty().get();
-        Optional<String> toCheck = comp.getChecksum(givenFile);
+        File givenFile = new File(outFile.textProperty().get().trim());
+        String targetChecksum = inTarget.textProperty().get().trim();
+
+        // compare
+        Optional<Boolean> checksumsIdentical = comp.verifyChecksum(givenFile, targetChecksum);
 
         // compare and adjust GUI to the result
-        boolean correctChecksum = toCheck.isPresent() && toBe.equals(toCheck.get());
+        boolean correctChecksum = checksumsIdentical.isPresent() && checksumsIdentical.get();
         setResult(correctChecksum);
     }
 
+    /**
+     * Changes the label presenting the comparison's result according to the result given by the argument.
+     *
+     * @param correct true for identical checksums, else false
+     */
     private void setResult(boolean correct) {
         if (correct) {
             result.setTextFill(Color.GREEN);
-            result.setText("Correct Checksum!");
+            result.setText(bundle.getString("pane.correctChecksum"));
         } else {
             result.setTextFill(Color.RED);
-            result.setText("False Checksum!");
+            result.setText(bundle.getString("pane.falseChecksum"));
         }
     }
 

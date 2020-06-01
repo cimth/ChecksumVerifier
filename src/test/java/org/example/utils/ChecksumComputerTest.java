@@ -11,8 +11,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Optional;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class ChecksumComputerTest {
 
@@ -92,5 +91,94 @@ public class ChecksumComputerTest {
 
         assertTrue(checksum.isPresent());
         assertEquals("cf83e1357eefb8bdf1542850d66d8007d620e4050b5715dc83f4a921d36ce9ce47d0d13c5d85f2b0ff8318d2877eec2f63b931bd47417a81a538327af927da3e", checksum.get());
+    }
+
+    /*==================================================*
+     *==               verifyChecksum()               ==*
+     *==================================================*/
+
+    @Test
+    public void verifyChecksum_GiveComputedChecksum_ReturnTrue() {
+
+        // test file, must exist (or throws an exception)
+        URL fileUrl = getClass().getClassLoader().getResource("test_checksum.txt");
+        if (fileUrl == null) {
+            throw new AssertionError("Test file not found!");
+        }
+        File file = new File(fileUrl.getFile());
+
+        // MD5
+        Optional<String> checksum = compMD5.getChecksum(file);
+        assertTrue(checksum.isPresent());
+
+        Optional<Boolean> correctChecksum = compMD5.verifyChecksum(file, checksum.get());
+
+        assertTrue(correctChecksum.isPresent());
+        assertTrue(correctChecksum.get());
+
+        // SHA1
+        checksum = compSHA1.getChecksum(file);
+        assertTrue(checksum.isPresent());
+
+        correctChecksum = compSHA1.verifyChecksum(file, checksum.get());
+
+        assertTrue(correctChecksum.isPresent());
+        assertTrue(correctChecksum.get());
+
+        // SHA256
+        checksum = compSHA256.getChecksum(file);
+        assertTrue(checksum.isPresent());
+
+        correctChecksum = compSHA256.verifyChecksum(file, checksum.get());
+
+        assertTrue(correctChecksum.isPresent());
+        assertTrue(correctChecksum.get());
+
+        // SHA512
+        checksum = compSHA512.getChecksum(file);
+        assertTrue(checksum.isPresent());
+
+        correctChecksum = compSHA512.verifyChecksum(file, checksum.get());
+
+        assertTrue(correctChecksum.isPresent());
+        assertTrue(correctChecksum.get());
+    }
+
+    @Test
+    public void verifyChecksum_GiveInvalidChecksum_ReturnFalse() {
+
+        // test file, must exist (or throws an exception)
+        URL fileUrl = getClass().getClassLoader().getResource("test_checksum.txt");
+        if (fileUrl == null) {
+            throw new AssertionError("Test file not found!");
+        }
+        File file = new File(fileUrl.getFile());
+
+        // set invalid checksum (correct is a hexadecimal string)
+        Optional<String> invalidChecksum = Optional.of("invalid");
+
+        // MD5
+        Optional<Boolean> falseChecksum = compMD5.verifyChecksum(file, invalidChecksum.get());
+
+        assertTrue(falseChecksum.isPresent());
+        assertFalse(falseChecksum.get());
+
+        // SHA1
+        falseChecksum = compSHA1.verifyChecksum(file, invalidChecksum.get());
+
+        assertTrue(falseChecksum.isPresent());
+        assertFalse(falseChecksum.get());
+
+        // SHA256
+        falseChecksum = compSHA256.verifyChecksum(file, invalidChecksum.get());
+
+        assertTrue(falseChecksum.isPresent());
+        assertFalse(falseChecksum.get());
+
+        // SHA512
+        falseChecksum = compSHA512.verifyChecksum(file, invalidChecksum.get());
+
+        assertTrue(falseChecksum.isPresent());
+        assertFalse(falseChecksum.get());
     }
 }

@@ -14,27 +14,27 @@
 
     <!-- choose file -->
     <VBox spacing="5">
-        <Label text="File To Check" />
+        <Label text="%pane.fileToCheck" />
         <TextArea fx:id="outFile" wrapText="true" disable="true" />
-        <Button fx:id="chooseFile" text="Choose File ..." onAction="#chooseFile" maxWidth="Infinity" focusTraversable="false" />
+        <Button fx:id="chooseFile" text="%pane.chooseFile" onAction="#chooseFile" maxWidth="Infinity" focusTraversable="false" />
     </VBox>
 
     <!-- target checksum -->
     <VBox spacing="5">
-        <Label text="Target Checksum" />
+        <Label text="%pane.targetChecksum" />
         <TextArea fx:id="inTarget" wrapText="true" />
     </VBox>
 
     <!-- target algorithm -->
     <VBox spacing="5">
-        <Label text="Algorithm" />
+        <Label text="%pane.algorithm" />
         <ComboBox fx:id="algorithms" maxWidth="Infinity" />
     </VBox>
 
     <!-- compare -->
     <VBox spacing="5">
         <Label fx:id="result" />
-        <Button fx:id="compare" text="Compare Checksum" onAction="#compareChecksum" maxWidth="Infinity"
+        <Button fx:id="verify" text="%pane.verifyChecksum" onAction="#verifyChecksum" maxWidth="Infinity"
                 disable="true" defaultButton="true" />
     </VBox>
 
