@@ -31,5 +31,5 @@ Currently, the GUI supports German and English.
 ## Build and start JAR
 
 1. Execute the Maven goal `package`
-2. The JAR file _.target/ChecksumVerifier-1.0-SNAPSHOT.jar_ includes all dependencies and can directly
+2. The JAR file _./target/ChecksumVerifier-1.0-SNAPSHOT.jar_ includes all dependencies and can directly
    be started with a double click if Java 11 is installed on the device
