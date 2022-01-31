@@ -14,6 +14,18 @@ The available algorithms for computing the checksum are the following:
 
 ![Screenshot](Screenshot.png)
 
+## Included dependencies
+
+| Dependency            | Version |
+|-----------------------|---------|
+| Java                  | 17      |
+| JavaFX                | 17      |
+| JUnit                 | 4.13.2  |
+| Log4j                 | 2.17.1  |
+| Maven Compiler Plugin | 3.9.0   |
+| Maven Shade Plugin    | 3.2.4   |
+| Versions Maven Plugin | 2.9.0   |
+
 ## Structure
 
 As the entry point for this application a  separate `Start` class is used for making the JAR created with the Maven 
