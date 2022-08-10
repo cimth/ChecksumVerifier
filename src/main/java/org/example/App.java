@@ -17,14 +17,6 @@ import java.util.ResourceBundle;
 public class App extends Application {
 
     /*==================================================*
-     *==             START APPLICATION                ==*
-     *==================================================*/
-
-    public static void launch(String[] args) {
-        launch();
-    }
-
-    /*==================================================*
      *==                   FIELDS                     ==*
      *==================================================*/
 

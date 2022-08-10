@@ -14,6 +14,21 @@ The available algorithms for computing the checksum are the following:
 
 ![Screenshot](Screenshot.png)
 
+## Included dependencies
+
+Consider [pom.xml](pom.xml) for more detailed information.
+
+| Dependency            | Version |
+|-----------------------|---------|
+| Java                  | 17      |
+| JavaFX                | 17.0.2  |
+| Log4j                 | 2.18.0  |
+| JUnit                 | 5.9.0   |
+| Maven Compiler Plugin | 3.10.1  |
+| Maven Assembly Plugin | 3.4.2   |
+| Versions Maven Plugin | 2.11.0  |
+| JavaFX Maven Plugin   | 0.0.8   |
+
 ## Structure
 
 As the entry point for this application a  separate `Start` class is used for making the JAR created with the Maven 
@@ -28,8 +43,13 @@ Since there is only one model and controller class those classes are not describ
 The correct language bundle is chosen in the `initLanguage()` method inside the `App` class.
 Currently, the GUI supports German and English.
 
+
+## Run the application via Maven
+
+1. Set the correct `javafx-graphics` classifier (`win`, `linux` or `mac`) inside [pom.xml](pom.xml)
+2. Run `mvn javafx:run`
+
 ## Build and start JAR
 
-1. Execute the Maven goal `package`
-2. The JAR file _.target/ChecksumVerifier-1.0-SNAPSHOT.jar_ includes all dependencies and can directly
-   be started with a double click if Java 11 is installed on the device
+1. Run `mvn clean package`
+2. Run `java -jar ./target/ChecksumVerifier.jar`
