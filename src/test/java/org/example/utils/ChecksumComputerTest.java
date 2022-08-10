@@ -1,8 +1,9 @@
 package org.example.utils;
 
 import org.example.model.Checksum;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.net.URL;
@@ -10,7 +11,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Optional;
 
-import static org.junit.Assert.*;
 
 public class ChecksumComputerTest {
 
@@ -27,7 +27,7 @@ public class ChecksumComputerTest {
      *==                    SETUP                     ==*
      *==================================================*/
 
-    @Before
+    @BeforeEach
     public void setUp() {
         compMD5 = new ChecksumComputer(Checksum.MD5);
         compSHA1 = new ChecksumComputer(Checksum.SHA1);
@@ -52,8 +52,8 @@ public class ChecksumComputerTest {
         // test each possible checksum algorithm
         for (Checksum alg : Checksum.values()) {
             Optional<String> checksum = new ChecksumComputer(alg).getChecksum(file);
-            assertTrue(checksum.isEmpty());
-            assertEquals(Optional.empty(), checksum);
+            Assertions.assertTrue(checksum.isEmpty());
+            Assertions.assertEquals(Optional.empty(), checksum);
         }
     }
 
@@ -70,26 +70,26 @@ public class ChecksumComputerTest {
         // MD5
         Optional<String> checksum = compMD5.getChecksum(file);
 
-        assertTrue(checksum.isPresent());
-        assertEquals("d41d8cd98f00b204e9800998ecf8427e", checksum.get());
+        Assertions.assertTrue(checksum.isPresent());
+        Assertions.assertEquals("d41d8cd98f00b204e9800998ecf8427e", checksum.get());
 
         // SHA1
         checksum = compSHA1.getChecksum(file);
 
-        assertTrue(checksum.isPresent());
-        assertEquals("da39a3ee5e6b4b0d3255bfef95601890afd80709", checksum.get());
+        Assertions.assertTrue(checksum.isPresent());
+        Assertions.assertEquals("da39a3ee5e6b4b0d3255bfef95601890afd80709", checksum.get());
 
         // SHA256
         checksum = compSHA256.getChecksum(file);
 
-        assertTrue(checksum.isPresent());
-        assertEquals("e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855", checksum.get());
+        Assertions.assertTrue(checksum.isPresent());
+        Assertions.assertEquals("e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855", checksum.get());
 
         // SHA512
         checksum = compSHA512.getChecksum(file);
 
-        assertTrue(checksum.isPresent());
-        assertEquals("cf83e1357eefb8bdf1542850d66d8007d620e4050b5715dc83f4a921d36ce9ce47d0d13c5d85f2b0ff8318d2877eec2f63b931bd47417a81a538327af927da3e", checksum.get());
+        Assertions.assertTrue(checksum.isPresent());
+        Assertions.assertEquals("cf83e1357eefb8bdf1542850d66d8007d620e4050b5715dc83f4a921d36ce9ce47d0d13c5d85f2b0ff8318d2877eec2f63b931bd47417a81a538327af927da3e", checksum.get());
     }
 
     /*==================================================*
@@ -108,39 +108,39 @@ public class ChecksumComputerTest {
 
         // MD5
         Optional<String> checksum = compMD5.getChecksum(file);
-        assertTrue(checksum.isPresent());
+        Assertions.assertTrue(checksum.isPresent());
 
         Optional<Boolean> correctChecksum = compMD5.verifyChecksum(file, checksum.get());
 
-        assertTrue(correctChecksum.isPresent());
-        assertTrue(correctChecksum.get());
+        Assertions.assertTrue(correctChecksum.isPresent());
+        Assertions.assertTrue(correctChecksum.get());
 
         // SHA1
         checksum = compSHA1.getChecksum(file);
-        assertTrue(checksum.isPresent());
+        Assertions.assertTrue(checksum.isPresent());
 
         correctChecksum = compSHA1.verifyChecksum(file, checksum.get());
 
-        assertTrue(correctChecksum.isPresent());
-        assertTrue(correctChecksum.get());
+        Assertions.assertTrue(correctChecksum.isPresent());
+        Assertions.assertTrue(correctChecksum.get());
 
         // SHA256
         checksum = compSHA256.getChecksum(file);
-        assertTrue(checksum.isPresent());
+        Assertions.assertTrue(checksum.isPresent());
 
         correctChecksum = compSHA256.verifyChecksum(file, checksum.get());
 
-        assertTrue(correctChecksum.isPresent());
-        assertTrue(correctChecksum.get());
+        Assertions.assertTrue(correctChecksum.isPresent());
+        Assertions.assertTrue(correctChecksum.get());
 
         // SHA512
         checksum = compSHA512.getChecksum(file);
-        assertTrue(checksum.isPresent());
+        Assertions.assertTrue(checksum.isPresent());
 
         correctChecksum = compSHA512.verifyChecksum(file, checksum.get());
 
-        assertTrue(correctChecksum.isPresent());
-        assertTrue(correctChecksum.get());
+        Assertions.assertTrue(correctChecksum.isPresent());
+        Assertions.assertTrue(correctChecksum.get());
     }
 
     @Test
@@ -159,25 +159,25 @@ public class ChecksumComputerTest {
         // MD5
         Optional<Boolean> falseChecksum = compMD5.verifyChecksum(file, invalidChecksum.get());
 
-        assertTrue(falseChecksum.isPresent());
-        assertFalse(falseChecksum.get());
+        Assertions.assertTrue(falseChecksum.isPresent());
+        Assertions.assertFalse(falseChecksum.get());
 
         // SHA1
         falseChecksum = compSHA1.verifyChecksum(file, invalidChecksum.get());
 
-        assertTrue(falseChecksum.isPresent());
-        assertFalse(falseChecksum.get());
+        Assertions.assertTrue(falseChecksum.isPresent());
+        Assertions.assertFalse(falseChecksum.get());
 
         // SHA256
         falseChecksum = compSHA256.verifyChecksum(file, invalidChecksum.get());
 
-        assertTrue(falseChecksum.isPresent());
-        assertFalse(falseChecksum.get());
+        Assertions.assertTrue(falseChecksum.isPresent());
+        Assertions.assertFalse(falseChecksum.get());
 
         // SHA512
         falseChecksum = compSHA512.verifyChecksum(file, invalidChecksum.get());
 
-        assertTrue(falseChecksum.isPresent());
-        assertFalse(falseChecksum.get());
+        Assertions.assertTrue(falseChecksum.isPresent());
+        Assertions.assertFalse(falseChecksum.get());
     }
 }

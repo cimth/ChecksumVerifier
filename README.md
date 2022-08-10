@@ -16,15 +16,18 @@ The available algorithms for computing the checksum are the following:
 
 ## Included dependencies
 
+Consider [pom.xml](pom.xml) for more detailed information.
+
 | Dependency            | Version |
 |-----------------------|---------|
 | Java                  | 17      |
-| JavaFX                | 17      |
-| JUnit                 | 4.13.2  |
-| Log4j                 | 2.17.1  |
-| Maven Compiler Plugin | 3.9.0   |
-| Maven Shade Plugin    | 3.2.4   |
-| Versions Maven Plugin | 2.9.0   |
+| JavaFX                | 17.0.2  |
+| Log4j                 | 2.18.0  |
+| JUnit                 | 5.9.0   |
+| Maven Compiler Plugin | 3.10.1  |
+| Maven Assembly Plugin | 3.4.2   |
+| Versions Maven Plugin | 2.11.0  |
+| JavaFX Maven Plugin   | 0.0.8   |
 
 ## Structure
 
